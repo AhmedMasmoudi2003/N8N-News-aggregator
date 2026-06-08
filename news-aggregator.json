@@ -1,0 +1,371 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1504,
+        256
+      ],
+      "id": "2772ec98-c0c5-456a-8a8d-866cff80c1cd",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {
+          "ignoreSSL": true
+        }
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        -1184,
+        352
+      ],
+      "id": "8fdea889-0679-46fc-9ef0-6a71a02f290c",
+      "name": "RSS Read",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ee58738e-4488-464d-b0ba-895c409de7da",
+              "name": "source_name",
+              "value": "={{ $('Loop Over Items').item.json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "75994406-4e8b-4537-9641-f69e360de758",
+              "name": "category",
+              "value": "Personal",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -976,
+        352
+      ],
+      "id": "aefd3bac-de40-4945-84d6-204ea7d5732b",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  { \n    url: \"https://www.lapresse.tn/rss/\", \n    name: \"La Presse de Tunisie\", \n    type: \"Personal\" \n  },\n  { \n    url: \"https://www.tap.info.tn/rss-fr.xml\", \n    name: \"TAP - Agence Tunis Afrique Presse\", \n    type: \"Personal\" \n  },\n  { \n    url: \"https://www.businessnews.com.tn/rss.php\", \n    name: \"Business News\", \n    type: \"Personal\" \n  },\n  { \n    url: \"https://kapitalis.com/rss/\", \n    name: \"Kapitalis\", \n    type: \"Personal\" \n  },\n  { \n    url: \"https://www.tuniscope.com/rss/\", \n    name: \"Tuniscope\", \n    type: \"Personal\" \n  },\n  { \n    url: \"https://nawaat.org/feed/\", \n    name: \"Nawaat\", \n    type: \"Personal\" \n  },\n  { \n    url: \"https://www.alchourouk.com/rss.xml\", \n    name: \"Al Chourouk\", \n    type: \"Personal\" \n  },\n  { \n    url: \"https://www.assabah.tn/rss/\", \n    name: \"Assabah\", \n    type: \"Personal\" \n  },\n  { \n    url: \"https://leaders.com.tn/feed/\", \n    name: \"Leaders\", \n    type: \"Personal\" \n  },\n  { \n    url: \"https://www.mosaiquefm.net/rss/\", \n    name: \"Mosaique FM\", \n    type: \"Personal\" \n  },\n  { \n    url: \"https://www.expressfm.net/rss/\", \n    name: \"Express FM\", \n    type: \"Personal\" \n  },\n  { \n    url: \"https://www.jawharafm.net/rss/\", \n    name: \"Jawhara FM\", \n    type: \"Personal\" \n  },\n  { \n    url: \"https://webdo.tn/rss/\", \n    name: \"Webdo\", \n    type: \"Personal\" \n  },\n  { \n    url: \"https://www.hakaekonline.com/rss/\", \n    name: \"Hakaek Online\", \n    type: \"Personal\" \n  },\n  { \n    url: \"https://www.tunisie-numerique.com/feed/\", \n    name: \"Tunisie Numerique\", \n    type: \"Personal\" \n  },\n  { \n    url: \"https://turess.com/rss/\", \n    name: \"Turess\", \n    type: \"Personal\" \n  },\n  { \n    url: \"https://www.infostunisie.com/feed/\", \n    name: \"Infos Tunisie\", \n    type: \"Personal\" \n  },\n  { \n    url: \"https://www.espacemanager.com/rss/\", \n    name: \"Espace Manager\", \n    type: \"Personal\" \n  },\n  { \n    url: \"https://www.leconomistemaghrebin.com/feed/\", \n    name: \"L'Economiste Maghrebin\", \n    type: \"Personal\" \n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1728,
+        256
+      ],
+      "id": "1edf5dfe-eaa8-457f-bb6e-08836542866c",
+      "name": "Our Sources"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "titles",
+        "include": "specifiedFields",
+        "fieldsToInclude": "title",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -848,
+        160
+      ],
+      "id": "bea1a529-f167-494d-81e3-3f0a150e0deb",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "maxItems": 80
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -1152,
+        112
+      ],
+      "id": "207a7cc9-7a14-45aa-90bb-1ecb2459c897",
+      "name": "Limit1"
+    },
+    {
+      "parameters": {
+        "path": "get-tunisia-news",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2000,
+        256
+      ],
+      "id": "2471d217-f8d6-41a3-9493-581de442d5d3",
+      "name": "Webhook",
+      "webhookId": "c84e5783-7b80-4a16-87b9-b1eab9db491b"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        112,
+        96
+      ],
+      "id": "8b3c8926-b127-4d1f-8f21-ff150269c547",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Extract LLM Data from the direct input wire\nconst aiData = $input.first().json;\n\n// 2. Fetch the Full Source News Pool from workflow history (Limit1)\nlet newsPool = [];\ntry {\n  // Because Limit1 is a parent of this node's path, we can look it up safely\n  const rawLimitItems = $('Limit1').all();\n  newsPool = rawLimitItems.map(item => item.json);\n} catch (e) {\n  // Safe extraction of the error message for TypeScript / modern JS runtimes\n  const errorMessage = e instanceof Error ? e.message : String(e);\n  return [{ json: { error: \"Could not find Limit1 in the execution history.\", details: errorMessage } }];\n}\n\n// 3. Extract the array indices safely from the LLM\nlet finalIndices = [];\nconst potentialInput = aiData.output || aiData.text || aiData.selected_indices || aiData;\n\nif (Array.isArray(potentialInput)) {\n  finalIndices = potentialInput.map(i => parseInt(String(i), 10));\n} else if (typeof potentialInput === 'string') {\n  const match = potentialInput.match(/\\[[\\s\\d,]*\\]/);\n  if (match) { \n    try { finalIndices = JSON.parse(match[0]); } catch(e){} \n  }\n} else if (typeof potentialInput === 'object') {\n  const match = JSON.stringify(potentialInput).match(/\\[[\\s\\d,]*\\]/);\n  if (match) { \n    try { finalIndices = JSON.parse(match[0]); } catch(e){} \n  }\n}\n\n// 4. Map the indices back to the Limit1 articles and strip metadata\nconst curatedNews = finalIndices\n  .map(i => {\n    const idx = parseInt(String(i), 10);\n    const rawArticle = newsPool[idx];\n    \n    if (!rawArticle) return null;\n\n    // Handle standard structural nesting safely\n    const target = rawArticle.json ? rawArticle.json : rawArticle;\n\n    return {\n      title: target.title || \"\",\n      date: target.pubDate || target.isoDate || target.date || \"\",\n      link: target.link || \"\",\n      categories: target.categories || target.category || [],\n      source: target.source_name || target.creator || \"\"\n    };\n  })\n  .filter(item => !!item && item.title !== \"\");\n\n// 5. Stable Clean Output Logic\nif (curatedNews.length > 0) {\n  return curatedNews.map(item => ({ json: item }));\n} else {\n  return [{ \n    json: { \n      status: \"empty\", \n      message: \"Zero articles passed the high-signal tech criteria today.\",\n      _debug_indices: finalIndices,\n      _debug_pool_size: newsPool.length\n    } \n  }]; \n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -176,
+        80
+      ],
+      "id": "40591ffd-12e5-45d3-a19c-6d2a6d0d9871",
+      "name": "Code in JavaScript",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=# ROLE & TARGET AUDIENCE\nYou are a Lead Technical Editor for a high-signal scientific and innovation-focused news stream. Your audience consists of engineers, researchers, and tech enthusiasts who value technical progress, hard data, and engineering over sensationalism.\n\n# OBJECTIVE\nAnalyze the provided numbered list of news titles. Your sole task is to extract the indices (numbers) of the items that fit our precise technical niche.\n\n# FILTERING PROTOCOL (STRICT ENFORCEMENT)\n\n## 1. MANDATORY RETENTION (High Signal Only)\nOnly retain titles that strictly fall into these specific domains:\n- Breakthroughs in AI/AGI, LLMs, Machine Learning, Quantum Computing, Space exploration, or Hardware innovations.\n- Software engineering architecture, dev tools, Cybersecurity patches/threats, and Data Science.\n- Significant tech startup funding, regional engineering milestones, or infrastructure innovation in the Mediterranean/MENA region.\n\n## 2. ABSOLUTELY FORBIDDEN TOPICS (Immediate Drop Criteria)\nIf an item contains ANY of the following, do not include its index. There are zero exceptions:\n- GOVERNANCE & POLITICS: Drop any mention of governments, presidents, ministers, parliaments, decrees, elections, courts, trials, or political figures.\n- SPORTS: Drop any mention of football (soccer), CAF, results, matches, transfers, or stadiums.\n- SOCIAL ISSUES & NEGATIVITY: Drop any mention of medicine/illnesses, labor strikes, water/electricity shortages, crimes, accidents, or general social grievances.\n- GENERAL INTEREST: Drop any entertainment, celebrity news, lifestyle, or religious updates.\n\n# CRITICAL EXECUTION RULES\n- QUALITY OVER QUANTITY: Ignore any request or preference to hit a specific count (like 35-40). If only 2 titles pass the strict criteria, your output array must only contain 2 numbers. Never pad the list with borderline items.\n- DEDUPLICATION: If multiple titles cover the same technical story, extract ONLY the index of the single most informative title.\n- RANKING: Order the extracted indices by relevance, putting the highest technical signal strength first.\n\n# OUTPUT CONTRACT\n- Return ONLY a raw JSON array of integers containing the valid indices.\n- Do NOT wrap your response in markdown code blocks (No ```json).\n- Do NOT output any conversational text, introductory statements, or explanations. \n- Example Acceptable Output: [4, 19, 23, 8]\n- Number of news that should be chosen : between 20 and 30\n\n# INPUT DATA\nThese are the titles you must filter:\n{{ $('Aggregate').first().json.titles.map((item, index) => `${index}: ${item.title}`).join('\\n') }}",
+        "hasOutputParser": true,
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        -560,
+        192
+      ],
+      "id": "05303836-36b7-47c8-9207-a97f20296f9a",
+      "name": "LLM"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "[1,10,15,16,30,32,44,45,46,60,66,70,74,80]"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -400,
+        432
+      ],
+      "id": "e6a16af1-a857-4c47-8e0e-9930a83e05d4",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "model": "deepseek/deepseek-v3.2",
+        "options": {
+          "maxTokens": 300
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        432
+      ],
+      "id": "21563822-7bb5-4160-999b-0f9ee540e3a7",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "CGpdjH3eIZOhS2Ko",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2000,
+        448
+      ],
+      "id": "930a87a4-33c1-46ff-a1a9-5894c266a805",
+      "name": "When clicking ‘Execute workflow’"
+    }
+  ],
+  "connections": {
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Limit1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "RSS Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Read": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Our Sources": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "LLM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Our Sources",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "LLM",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "LLM",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Our Sources",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5"
+  }
+}
